@@ -1,0 +1,31 @@
+{
+  "name": "suniva-backend",
+  "description": "Backed cloud function for suniva medicals",
+  "version": "0.0.0",
+  "main": "lib/index.js",
+  "types": "lib/types.d.ts",
+  "license": "MIT",
+  "scripts": {
+    "lint": "tslint -p ./",
+    "docker": "docker-compose up",
+    "dev": "ts-node-dev ./src/index.ts",
+    "build": "rimraf lib && tsc",
+    "deploy": "yarn build && gcloud functions deploy component-store --runtime nodejs8 --trigger-http --entry-point app"
+  },
+  "dependencies": {
+    "body-parser": "^1.19.0",
+    "dotenv": "^8.2.0",
+    "express": "^4.17.1",
+    "pg": "^8.2.1",
+    "sequelize": "^6.3.0",
+    "uuid": "^8.2.0"
+  },
+  "devDependencies": {
+    "@types/express": "^4.17.2",
+    "rimraf": "^3.0.0",
+    "ts-node-dev": "^1.0.0-pre.44",
+    "tslint": "^5.20.1",
+    "tslint-config-prettier": "^1.18.0",
+    "typescript": "^3.7.3"
+  }
+}

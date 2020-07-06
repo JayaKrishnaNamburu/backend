@@ -1,0 +1,11 @@
+suniva_backend:
+    build: .
+    links:
+      - postgres
+    ports:
+      - "5432:5432"
+  
+    postgres: 
+      image: postgres
+      ports:
+      - "5432:5432"
