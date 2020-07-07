@@ -10,14 +10,9 @@ function initModel(): void {
   User.init(
     {
       id: {
-        type: DataTypes.UUIDV4,
+        type: DataTypes.UUID,
         defaultValue: DataTypes.UUIDV4,
         primaryKey: true,
-      },
-      is_admin: {
-        type: DataTypes.BOOLEAN,
-        defaultValue: false,
-        allowNull: false
       },
       name: {
         type: DataTypes.STRING,
@@ -30,10 +25,8 @@ function initModel(): void {
         validate: {
           isEmail: true,
         },
-      },
+      }
     },
     modelConfig
   );
-  User.sync({ force: true})
 }
-

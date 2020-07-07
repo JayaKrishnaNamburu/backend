@@ -14,8 +14,7 @@
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
     "esModuleInterop": true,
-    "noUnusedLocals": true,
-    "types": ["jest"]
+    "noUnusedLocals": true
   },
   "exclude": [
     "node_modules",
