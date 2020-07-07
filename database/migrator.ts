@@ -17,9 +17,9 @@ class DatabaseMigrator {
         console.log(logs);
       },
       migrations: {
-        path: path.join(__dirname, './migrations'),
+        path: path.join(__dirname, "./migrations"),
         params: [sequelize.getQueryInterface()],
-        pattern: /\.ts$/
+        pattern: /\.ts$/,
       },
       storage: "sequelize",
       storageOptions: { sequelize },
@@ -27,7 +27,7 @@ class DatabaseMigrator {
   }
 
   public async migrateChanges() {
-    await this.umzug.up()
+    await this.umzug.up();
   }
 
   public async revertLastMigration() {

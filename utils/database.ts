@@ -6,6 +6,6 @@ export const getModelConfig = (modelName: string): InitOptions => {
 
   return {
     sequelize,
-    modelName,
+    modelName
   };
 };
