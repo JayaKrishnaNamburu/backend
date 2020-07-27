@@ -7,6 +7,7 @@ const {
   DATABASE_USER,
   DATABASE_PASSWORD,
   DATABASE_SERVER,
+  DATABASE_PORT,
 } = process.env;
 
 export const DATABASE_CONFIG: Options = {
@@ -14,6 +15,7 @@ export const DATABASE_CONFIG: Options = {
   username: DATABASE_USER,
   password: DATABASE_PASSWORD,
   host: DATABASE_SERVER,
+  port: Number(DATABASE_PORT),
   logging: console.log,
   dialect: "postgres",
   dialectOptions: {
