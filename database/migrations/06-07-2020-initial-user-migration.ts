@@ -25,12 +25,6 @@ export async function up(query: QueryInterface) {
             isEmail: true,
           },
         },
-        createdAt: {
-          type: DataTypes.DATE,
-        },
-        updatedAt: {
-          type: DataTypes.DATE,
-        },
       },
       { transaction }
     );

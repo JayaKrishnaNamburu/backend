@@ -12,7 +12,7 @@ class UserRepository {
   public async createUser(params: {
     name: string;
     email: string;
-    passwordDigest: string;
+    password_digest: string;
     phone: string;
     zone?: string;
   }): Promise<User> {
@@ -25,7 +25,7 @@ class UserRepository {
   public async getUserWithEmail(email: string) {
     try {
       const user = User.findOne({
-        attributes: ["name", "email", "id", "phone", "isAdmin"],
+        attributes: ["name", "email", "id", "phone", "is_admin"],
         where: {
           email,
         },
@@ -38,7 +38,7 @@ class UserRepository {
 
   public async getUserPasswordHashByEmail(email: string): Promise<any> {
     return User.findOne({
-      attributes: ["passwordDigest"],
+      attributes: ["password_digest"],
       where: {
         email,
       },

@@ -2,7 +2,11 @@ import { CatgoriesRepository } from "./repository";
 
 class CategoriesController {
   public async fetchCategories() {
-    return CatgoriesRepository.getCategores();
+    return CatgoriesRepository.get();
+  }
+
+  public async addCategory(name: string) {
+    return CatgoriesRepository.add({ name });
   }
 }
 

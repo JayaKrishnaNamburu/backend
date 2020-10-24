@@ -7,8 +7,12 @@ import swagger from "swagger-ui-express";
 import { DatabaseConnection } from "../database";
 
 import { addCategory, getCategories } from "../domain/categories";
+import { getProductsByCategory } from "../domain/products";
 import { signUp, login } from "../domain/auth";
 import { getAllUsers } from "../domain/user";
+import { authChecker } from "../utils/auth-chcker";
+import { paramsChecker } from "../utils/params_checker";
+import { bodyParamsChecker } from "../utils/body_params_checker";
 
 const port = process.env.PORT || 8080;
 const app = express();
@@ -31,18 +35,44 @@ app.get("/", (req, res) => {
   res.status(200).send("Server is Running");
 });
 
-app.post("/signup", signUp);
+app.post(
+  "/signup",
+  (req, res, next) =>
+    bodyParamsChecker(req, res, next, [
+      "email",
+      "name",
+      "password",
+      "confirm_password",
+      "phone",
+    ]),
+  signUp
+);
+app.get("/categories", getCategories);
+
 app.get(
   "/users",
   passport.authenticate("jwt", { session: false }),
+  authChecker,
   getAllUsers
 );
-app.post("/login", login);
-app.get("/categories", getCategories);
+
+app.post(
+  "/login",
+  (req, res, next) => bodyParamsChecker(req, res, next, ["email", "password"]),
+  login
+);
+
 app.put(
   "/add_category",
   passport.authenticate("jwt", { session: false }),
+  authChecker,
   addCategory
+);
+
+app.get(
+  "/products/:category_id",
+  (req, res, next) => paramsChecker(req, res, next, ["category_id"]),
+  getProductsByCategory
 );
 
 if (process.env.NODE_ENV !== "production") {

@@ -7,7 +7,7 @@ export async function up(query: QueryInterface) {
   try {
     await query.addColumn(
       DATABASE_MODELS.USERS,
-      "isAdmin",
+      "is_admin",
       {
         type: DataTypes.BOOLEAN,
         defaultValue: false,
@@ -26,7 +26,7 @@ export async function up(query: QueryInterface) {
 export async function down(query: QueryInterface) {
   const transaction = await query.sequelize.transaction();
   try {
-    await query.removeColumn(DATABASE_MODELS.USERS, "isAdmin");
+    await query.removeColumn(DATABASE_MODELS.USERS, "is_admin");
     transaction.commit();
   } catch (e) {
     transaction.rollback();

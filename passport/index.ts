@@ -14,7 +14,7 @@ module.exports = (passport: PassportStatic) => {
         const { email: email_from_token } = data;
 
         if (!email_from_token) {
-          throw new Error("Invalid User");
+          done(null, {});
         }
 
         try {
@@ -23,13 +23,11 @@ module.exports = (passport: PassportStatic) => {
           );
 
           if (!user) {
-            // Users email is missing for the db
-            throw new Error("Invalid user");
+            done(null, {});
           }
-
           return done(null, user.toJSON());
         } catch (e) {
-          done(e, false);
+          done(e, {});
           throw new Error("Invalid useer");
         }
       }

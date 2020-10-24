@@ -9,19 +9,15 @@ class UserController {
     name: string,
     email: string,
     password: string,
-    passwordConfirmation: string,
     phone: string,
     zone?: string
   ): Promise<User> {
-    if (password !== passwordConfirmation) {
-      throw new Error(`Password and confirm password doesn't match`);
-    }
     const hash = bcrypt.hashSync(password, 10);
 
     return UserRepository.createUser({
       name,
       email,
-      passwordDigest: hash,
+      password_digest: hash,
       phone,
       zone,
     });
@@ -37,16 +33,27 @@ class UserController {
         await UserRepository.getUserPasswordHashByEmail(email)
       ).toJSON();
 
-      const isValidPassword = bcrypt.compareSync(password, hash.passwordDigest);
+      const isValidPassword = bcrypt.compareSync(
+        password,
+        hash.password_digest
+      );
+
       if (!isValidPassword) {
-        return Promise.reject(new Error("Password hash did not match !!"));
+        return Promise.reject(new Error("Wrong password"));
       }
+
       if (!process.env.JWT_SECRET) {
-        return Promise.reject(new Error("JWT missing!!"));
+        return Promise.reject(new Error("JWT secret missing!!"));
       }
-      const token = jwt.sign({ email }, process.env.JWT_SECRET, {
-        expiresIn: "2 days",
-      });
+
+      const token = jwt.sign(
+        { email, time: Date.now() },
+        process.env.JWT_SECRET,
+        {
+          expiresIn: "2 days",
+        }
+      );
+
       return Promise.resolve({ key: token });
     } catch (e) {
       return Promise.reject(e);

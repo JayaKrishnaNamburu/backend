@@ -30,12 +30,17 @@ function initModel(): void {
       },
       createdAt: {
         type: DataTypes.DATE,
+        field: "created_at",
+        allowNull: false,
       },
       updatedAt: {
         type: DataTypes.DATE,
+        field: "updated_at",
+        allowNull: false,
       },
-      passwordDigest: {
+      password_digest: {
         type: DataTypes.STRING,
+        field: "password_digest",
         allowNull: false,
         validate: {
           notEmpty: true,

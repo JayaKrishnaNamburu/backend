@@ -25,6 +25,16 @@ function initModel(): void {
         type: DataTypes.UUID,
         allowNull: false,
       },
+      createdAt: {
+        type: DataTypes.DATE,
+        field: "created_at",
+        allowNull: false,
+      },
+      updatedAt: {
+        type: DataTypes.DATE,
+        field: "updated_at",
+        allowNull: false,
+      },
     },
     modelConfig
   );
