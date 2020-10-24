@@ -19,11 +19,12 @@ export const signUp = async (req, res) => {
     );
 
     if (result.toJSON()) {
-      res.status(200).end();
+      return res.status(200).end();
     }
+    return res.status(500).end();
   } catch (e) {
     console.log(e);
-    res.status(400).json({ error: `Failed in creating user` });
+    return res.status(400).json({ error: `Failed in creating user` });
   }
 };
 

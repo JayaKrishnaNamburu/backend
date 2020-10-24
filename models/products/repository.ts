@@ -11,7 +11,10 @@ class ProductsRepository {
   }
 
   public getProductsByCategory(category_id: string) {
-    return Products.findAll({ where: { category_id } });
+    return Products.findAll({
+      where: { category_id },
+      attributes: ["name", "id"],
+    });
   }
 }
 

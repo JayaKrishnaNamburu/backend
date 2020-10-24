@@ -7,7 +7,7 @@ import swagger from "swagger-ui-express";
 import { DatabaseConnection } from "../database";
 
 import { addCategory, getCategories } from "../domain/categories";
-import { getProductsByCategory } from "../domain/products";
+import { addProduct, getProductsByCategory } from "../domain/products";
 import { signUp, login } from "../domain/auth";
 import { getAllUsers } from "../domain/user";
 import { authChecker } from "../utils/auth-chcker";
@@ -64,6 +64,7 @@ app.post(
 
 app.put(
   "/add_category",
+  (req, res, next) => bodyParamsChecker(req, res, next, ["category_name"]),
   passport.authenticate("jwt", { session: false }),
   authChecker,
   addCategory
@@ -73,6 +74,14 @@ app.get(
   "/products/:category_id",
   (req, res, next) => paramsChecker(req, res, next, ["category_id"]),
   getProductsByCategory
+);
+
+app.put(
+  "/add_product",
+  (req, res, next) => bodyParamsChecker(req, res, next, ["name"]),
+  passport.authenticate("jwt", { session: false }),
+  authChecker,
+  addProduct
 );
 
 if (process.env.NODE_ENV !== "production") {
