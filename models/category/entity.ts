@@ -2,14 +2,14 @@ import { Model, DataTypes } from "sequelize";
 import { DATABASE_MODELS } from "../../utils/constants";
 import { getModelConfig } from "../../utils/database";
 
-export class User extends Model {
+export class Categories extends Model {
   static initModel = initModel;
   static initAssociations = initAssociations;
 }
 
 function initModel(): void {
-  const modelConfig = getModelConfig(DATABASE_MODELS.USERS);
-  User.init(
+  const modelConfig = getModelConfig(DATABASE_MODELS.CATEGORIES);
+  Categories.init(
     {
       id: {
         type: DataTypes.UUID,
@@ -19,14 +19,7 @@ function initModel(): void {
       name: {
         type: DataTypes.STRING,
         allowNull: true,
-      },
-      email: {
-        type: DataTypes.STRING(100),
         unique: true,
-        allowNull: false,
-        validate: {
-          isEmail: true,
-        },
       },
       createdAt: {
         type: DataTypes.DATE,
@@ -37,22 +30,6 @@ function initModel(): void {
         type: DataTypes.DATE,
         field: "updated_at",
         allowNull: false,
-      },
-      password_digest: {
-        type: DataTypes.STRING,
-        field: "password_digest",
-        allowNull: false,
-        validate: {
-          notEmpty: true,
-        },
-      },
-      phone: {
-        type: DataTypes.STRING,
-        allowNull: false,
-        unique: true,
-        validate: {
-          notEmpty: true,
-        },
       },
     },
     modelConfig

@@ -8,7 +8,13 @@
     "declaration": false,
     "moduleResolution": "node",
     "lib": [
-      "ES2020"
+      "esnext"
+    ],
+    "types": [
+      "node"
+    ],
+    "typeRoots": [
+      "node_modules/@types"
     ],
     "outDir": "dist",
     "emitDecoratorMetadata": true,

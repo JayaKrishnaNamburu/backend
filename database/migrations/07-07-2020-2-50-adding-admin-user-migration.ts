@@ -1,16 +1,17 @@
 import { QueryInterface, DataTypes } from "sequelize";
+import { DATABASE_MODELS } from "../../utils/constants";
 
 export async function up(query: QueryInterface) {
   const transaction = await query.sequelize.transaction();
 
   try {
     await query.addColumn(
-      "users",
-      'isAdmin',
+      DATABASE_MODELS.USERS,
+      "is_admin",
       {
         type: DataTypes.BOOLEAN,
         defaultValue: false,
-        allowNull: false
+        allowNull: false,
       },
       { transaction }
     );
@@ -25,7 +26,7 @@ export async function up(query: QueryInterface) {
 export async function down(query: QueryInterface) {
   const transaction = await query.sequelize.transaction();
   try {
-    await query.removeColumn('users', 'isAdmin');
+    await query.removeColumn(DATABASE_MODELS.USERS, "is_admin");
     transaction.commit();
   } catch (e) {
     transaction.rollback();

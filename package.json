@@ -32,6 +32,7 @@
     "@types/jsonwebtoken": "^8.5.0",
     "@types/passport-jwt": "^3.0.3",
     "rimraf": "^3.0.0",
+    "swagger-ui-express": "^4.1.4",
     "ts-node-dev": "^1.0.0-pre.44",
     "tslint": "^5.20.1",
     "tslint-config-prettier": "^1.18.0",

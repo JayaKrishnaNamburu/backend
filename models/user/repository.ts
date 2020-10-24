@@ -6,38 +6,39 @@ class UserRepository {
   }
 
   public getAllUsers(): Promise<User[]> {
-    return User.findAll();
+    return User.findAll({ attributes: ["email", "name", "id", "phone"] });
   }
 
-  public async createUser(
-    name: string,
-    email: string,
-    passwordDigest: string,
-    phone: string,
-    zone?: string
-  ): Promise<User> {
+  public async createUser(params: {
+    name: string;
+    email: string;
+    password_digest: string;
+    phone: string;
+    zone?: string;
+  }): Promise<User> {
     return User.create({
       id: uuidV4(),
-      name,
-      email,
-      passwordDigest,
-      phone,
-      zone,
+      ...params,
     });
   }
 
   public async getUserWithEmail(email: string) {
-    return User.findOne({
-      attributes: ["name", "email", "id", "phone"],
-      where: {
-        email,
-      },
-    });
+    try {
+      const user = User.findOne({
+        attributes: ["name", "email", "id", "phone", "is_admin"],
+        where: {
+          email,
+        },
+      });
+      return user;
+    } catch (e) {
+      throw new Error(e);
+    }
   }
 
   public async getUserPasswordHashByEmail(email: string): Promise<any> {
     return User.findOne({
-      attributes: ["passwordDigest"],
+      attributes: ["password_digest"],
       where: {
         email,
       },

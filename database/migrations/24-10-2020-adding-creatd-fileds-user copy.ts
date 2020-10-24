@@ -5,13 +5,23 @@ export async function up(query: QueryInterface) {
   const transaction = await query.sequelize.transaction();
 
   try {
-    await query.addColumn(DATABASE_MODELS.USERS, "phone", {
-      type: DataTypes.STRING,
+    await query.addColumn(DATABASE_MODELS.USERS, "created_at", {
+      type: DataTypes.DATE,
+      field: "created_at",
       allowNull: false,
-      unique: true,
-      validate: {
-        notEmpty: true,
-      },
+    });
+
+    transaction.commit();
+  } catch (e) {
+    transaction.rollback();
+    throw e;
+  }
+
+  try {
+    await query.addColumn(DATABASE_MODELS.USERS, "updated_at", {
+      type: DataTypes.DATE,
+      field: "updated_at",
+      allowNull: false,
     });
 
     transaction.commit();
@@ -24,7 +34,8 @@ export async function up(query: QueryInterface) {
 export async function down(query: QueryInterface) {
   const transaction = await query.sequelize.transaction();
   try {
-    await query.removeColumn(DATABASE_MODELS.USERS, "phone");
+    await query.removeColumn(DATABASE_MODELS.USERS, "crated_at");
+    await query.removeColumn(DATABASE_MODELS.USERS, "updated_at");
     transaction.commit();
   } catch (e) {
     transaction.rollback();

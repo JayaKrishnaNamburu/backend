@@ -6,7 +6,7 @@ export async function up(query: QueryInterface) {
 
   try {
     await query.createTable(
-      DATABASE_MODELS.USERS,
+      DATABASE_MODELS.CATEGORIES,
       {
         id: {
           type: DataTypes.UUID,
@@ -17,20 +17,33 @@ export async function up(query: QueryInterface) {
           type: DataTypes.STRING,
           allowNull: true,
         },
-        email: {
-          type: DataTypes.STRING(100),
-          unique: true,
+      },
+      { transaction }
+    );
+
+    await query.createTable(
+      DATABASE_MODELS.PRODUCTS,
+      {
+        id: {
+          type: DataTypes.UUID,
+          defaultValue: DataTypes.UUIDV4,
+          primaryKey: true,
+        },
+        name: {
+          type: DataTypes.STRING,
+          allowNull: true,
+        },
+        category_id: {
+          type: DataTypes.UUID,
           allowNull: false,
-          validate: {
-            isEmail: true,
-          },
         },
       },
       { transaction }
     );
-    transaction.commit();
+
+    await transaction.commit();
   } catch (e) {
-    transaction.rollback();
+    await transaction.rollback();
     throw e;
   }
 }
@@ -38,7 +51,8 @@ export async function up(query: QueryInterface) {
 export async function down(query: QueryInterface) {
   const transaction = await query.sequelize.transaction();
   try {
-    await query.dropTable("users", { transaction });
+    await query.dropTable(DATABASE_MODELS.CATEGORIES, { transaction });
+    await query.dropTable(DATABASE_MODELS.PRODUCTS, { transaction });
     transaction.commit();
   } catch (e) {
     transaction.rollback();

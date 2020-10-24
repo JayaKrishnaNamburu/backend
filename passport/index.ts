@@ -10,14 +10,25 @@ module.exports = (passport: PassportStatic) => {
         jwtFromRequest: ExtractJwt.fromHeader("x-api-key"),
         secretOrKey: process.env.JWT_SECRET,
       },
-      async (email_from_token, done) => {
+      async (data, done) => {
+        const { email: email_from_token } = data;
+
+        if (!email_from_token) {
+          done(null, {});
+        }
+
         try {
           const user = await UserController.fetUserAfterJWTToeknAuthentication(
             email_from_token
           );
+
+          if (!user) {
+            done(null, {});
+          }
           return done(null, user.toJSON());
         } catch (e) {
-          return done(e, false);
+          done(e, {});
+          throw new Error("Invalid useer");
         }
       }
     )

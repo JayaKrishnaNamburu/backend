@@ -1,15 +1,16 @@
 import { Model, DataTypes } from "sequelize";
 import { DATABASE_MODELS } from "../../utils/constants";
 import { getModelConfig } from "../../utils/database";
+import { Categories } from "../category/entity";
 
-export class User extends Model {
+export class Products extends Model {
   static initModel = initModel;
-  static initAssociations = initAssociations;
+  static initAssociations = initAssocations;
 }
 
 function initModel(): void {
-  const modelConfig = getModelConfig(DATABASE_MODELS.USERS);
-  User.init(
+  const modelConfig = getModelConfig(DATABASE_MODELS.PRODUCTS);
+  Products.init(
     {
       id: {
         type: DataTypes.UUID,
@@ -20,13 +21,9 @@ function initModel(): void {
         type: DataTypes.STRING,
         allowNull: true,
       },
-      email: {
-        type: DataTypes.STRING(100),
-        unique: true,
+      category_id: {
+        type: DataTypes.UUID,
         allowNull: false,
-        validate: {
-          isEmail: true,
-        },
       },
       createdAt: {
         type: DataTypes.DATE,
@@ -38,25 +35,15 @@ function initModel(): void {
         field: "updated_at",
         allowNull: false,
       },
-      password_digest: {
-        type: DataTypes.STRING,
-        field: "password_digest",
-        allowNull: false,
-        validate: {
-          notEmpty: true,
-        },
-      },
-      phone: {
-        type: DataTypes.STRING,
-        allowNull: false,
-        unique: true,
-        validate: {
-          notEmpty: true,
-        },
-      },
     },
     modelConfig
   );
 }
 
-function initAssociations(): void {}
+function initAssocations(): void {
+  Products.belongsTo(Categories, {
+    as: "category",
+    foreignKey: "category_id",
+    onDelete: "cascade",
+  });
+}
