@@ -1,9 +1,13 @@
+// @ts-ignore
+import swaggerSpec from "../utils/swagger-docs.json";
 import express from "express";
 import bodyParser from "body-parser";
 import passport from "passport";
+import swagger from "swagger-ui-express";
 import { DatabaseConnection } from "../database";
 
-import { signUp, authenticate } from "../domain/auth";
+import { addCategory, getCategories } from "../domain/categories";
+import { signUp, login } from "../domain/auth";
 import { getAllUsers } from "../domain/user";
 
 const port = process.env.PORT || 8080;
@@ -21,16 +25,25 @@ app.use((req, res, next) => {
 require("../passport")(passport);
 app.use(passport.initialize());
 
+app.use("/docs", swagger.serve, swagger.setup(swaggerSpec));
+
 app.get("/", (req, res) => {
   res.status(200).send("Server is Running");
 });
+
 app.post("/signup", signUp);
 app.get(
   "/users",
   passport.authenticate("jwt", { session: false }),
   getAllUsers
 );
-app.post("/authenticate", authenticate);
+app.post("/login", login);
+app.get("/categories", getCategories);
+app.put(
+  "/add_category",
+  passport.authenticate("jwt", { session: false }),
+  addCategory
+);
 
 if (process.env.NODE_ENV !== "production") {
   app.listen(port, async () => {

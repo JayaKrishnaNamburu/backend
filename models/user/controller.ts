@@ -17,7 +17,14 @@ class UserController {
       throw new Error(`Password and confirm password doesn't match`);
     }
     const hash = bcrypt.hashSync(password, 10);
-    return UserRepository.createUser(name, email, hash, phone, zone);
+
+    return UserRepository.createUser({
+      name,
+      email,
+      passwordDigest: hash,
+      phone,
+      zone,
+    });
   }
 
   public fetUserAfterJWTToeknAuthentication(email: string): Promise<User> {
@@ -25,18 +32,25 @@ class UserController {
   }
 
   public async authenticateUser(email: string, password: string) {
-    const hash = await (
-      await UserRepository.getUserPasswordHashByEmail(email)
-    ).toJSON();
-    const isValidPassword = bcrypt.compareSync(password, hash.passwordDigest);
-    if (!isValidPassword) {
-      return Promise.reject(new Error("Password hash did not match !!"));
+    try {
+      const hash = await (
+        await UserRepository.getUserPasswordHashByEmail(email)
+      ).toJSON();
+
+      const isValidPassword = bcrypt.compareSync(password, hash.passwordDigest);
+      if (!isValidPassword) {
+        return Promise.reject(new Error("Password hash did not match !!"));
+      }
+      if (!process.env.JWT_SECRET) {
+        return Promise.reject(new Error("JWT missing!!"));
+      }
+      const token = jwt.sign({ email }, process.env.JWT_SECRET, {
+        expiresIn: "2 days",
+      });
+      return Promise.resolve({ key: token });
+    } catch (e) {
+      return Promise.reject(e);
     }
-    if (!process.env.JWT_SECRET) {
-      return Promise.reject(new Error("JWT missing!!"));
-    }
-    const token = jwt.sign(email, process.env.JWT_SECRET);
-    return Promise.resolve({ key: token });
   }
 }
 

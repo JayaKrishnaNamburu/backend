@@ -1,12 +1,14 @@
 import { Model, DataTypes } from "sequelize";
+import { DATABASE_MODELS } from "../../utils/constants";
 import { getModelConfig } from "../../utils/database";
 
 export class User extends Model {
   static initModel = initModel;
+  static initAssociations = initAssociations;
 }
 
 function initModel(): void {
-  const modelConfig = getModelConfig("users");
+  const modelConfig = getModelConfig(DATABASE_MODELS.USERS);
   User.init(
     {
       id: {
@@ -26,19 +28,6 @@ function initModel(): void {
           isEmail: true,
         },
       },
-      phone: {
-        type: DataTypes.STRING,
-        allowNull: false,
-        unique: true,
-        validate: {
-          notEmpty: true,
-        },
-      },
-      isAdmin: {
-        type: DataTypes.BOOLEAN,
-        defaultValue: false,
-        allowNull: false,
-      },
       createdAt: {
         type: DataTypes.DATE,
       },
@@ -52,11 +41,17 @@ function initModel(): void {
           notEmpty: true,
         },
       },
-      zone: {
+      phone: {
         type: DataTypes.STRING,
         allowNull: false,
+        unique: true,
+        validate: {
+          notEmpty: true,
+        },
       },
     },
     modelConfig
   );
 }
+
+function initAssociations(): void {}

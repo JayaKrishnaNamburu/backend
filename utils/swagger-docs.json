@@ -1,0 +1,37 @@
+{
+    "openapi": "3.0.1",
+    "info": {
+        "version": "0.0.0",
+        "title": "Backend",
+        "description": "This is a sample server for a ticket store"
+    },
+    "servers": [
+        {
+            "url": "http://localhost:8080/",
+            "description": "Local server"
+        }
+    ],
+    "paths": {
+        "/login": {
+            "post": {
+                "tags": ["authentication"],
+                "description": "Allows to login to the system with email and password",
+                "parameters": [
+                    {
+                        "name": "email",
+                        "in": "path",
+                        "description": "Email used for login",
+                        "required": true,
+                        "allowEmptyValue": false
+                    },{
+                        "name": "password",
+                        "in": "path",
+                        "description": "Password of the user",
+                        "required": true,
+                        "allowEmptyValue": false
+                    }
+                ]
+            }
+        }
+    }
+}
