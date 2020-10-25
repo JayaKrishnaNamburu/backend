@@ -1,5 +1,5 @@
 import { QueryInterface, DataTypes } from "sequelize";
-import { DATABASE_MODELS } from "../../utils/constants";
+import { DATABASE_COLUMNS, DATABASE_MODELS } from "../../utils/constants";
 
 export async function up(query: QueryInterface) {
   const transaction = await query.sequelize.transaction();
@@ -36,6 +36,10 @@ export async function up(query: QueryInterface) {
         category_id: {
           type: DataTypes.UUID,
           allowNull: false,
+          references: {
+            model: DATABASE_MODELS.CATEGORIES,
+            key: DATABASE_COLUMNS.CATEGORIES.ID,
+          },
         },
       },
       { transaction }

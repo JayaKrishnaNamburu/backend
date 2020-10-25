@@ -13,6 +13,7 @@ import { getAllUsers } from "../domain/user";
 import { authChecker } from "../utils/auth-chcker";
 import { paramsChecker } from "../utils/params_checker";
 import { bodyParamsChecker } from "../utils/body_params_checker";
+import { DATABASE_COLUMNS } from "../utils/constants";
 
 const port = process.env.PORT || 8080;
 const app = express();
@@ -72,13 +73,21 @@ app.put(
 
 app.get(
   "/products/:category_id",
-  (req, res, next) => paramsChecker(req, res, next, ["category_id"]),
+  (req, res, next) =>
+    paramsChecker(req, res, next, [DATABASE_COLUMNS.PRODUCTS.CATEGORY_ID]),
   getProductsByCategory
 );
 
 app.put(
   "/add_product",
-  (req, res, next) => bodyParamsChecker(req, res, next, ["name"]),
+  (req, res, next) =>
+    bodyParamsChecker(req, res, next, [
+      DATABASE_COLUMNS.PRODUCTS.CATEGORY_ID,
+      DATABASE_COLUMNS.PRODUCTS.SHORT_DESCRIPTION,
+      DATABASE_COLUMNS.PRODUCTS.PRICE,
+      DATABASE_COLUMNS.PRODUCTS.QUANTITY,
+      DATABASE_COLUMNS.PRODUCTS.NAME,
+    ]),
   passport.authenticate("jwt", { session: false }),
   authChecker,
   addProduct
