@@ -6,13 +6,15 @@ import passport from "passport";
 import swagger from "swagger-ui-express";
 import { DatabaseConnection } from "../database";
 
-import { addCategory, getCategories } from "../domain/categories";
-import { addProduct, getProductsByCategory } from "../domain/products";
-import { signUp, login } from "../domain/auth";
-import { getAllUsers } from "../domain/user";
+import { UsersController } from "../models/user/controller";
+import { ProductsController } from "../models/products/controller";
+import { CategoriesController } from "../models/category/controller";
+import { AuthController } from "../models/auth/controller";
 import { authChecker } from "../utils/auth-chcker";
 import { paramsChecker } from "../utils/params_checker";
 import { bodyParamsChecker } from "../utils/body_params_checker";
+import { DATABASE_COLUMNS } from "../utils/constants";
+import { CartController } from "../models/cart/controller";
 
 const port = process.env.PORT || 8080;
 const app = express();
@@ -45,21 +47,21 @@ app.post(
       "confirm_password",
       "phone",
     ]),
-  signUp
+  AuthController.signUp
 );
-app.get("/categories", getCategories);
+app.get("/categories", CategoriesController.getCategories);
 
 app.get(
   "/users",
   passport.authenticate("jwt", { session: false }),
   authChecker,
-  getAllUsers
+  UsersController.getAllUsers
 );
 
 app.post(
   "/login",
   (req, res, next) => bodyParamsChecker(req, res, next, ["email", "password"]),
-  login
+  AuthController.login
 );
 
 app.put(
@@ -67,21 +69,44 @@ app.put(
   (req, res, next) => bodyParamsChecker(req, res, next, ["category_name"]),
   passport.authenticate("jwt", { session: false }),
   authChecker,
-  addCategory
+  CategoriesController.addCategory
 );
 
 app.get(
   "/products/:category_id",
-  (req, res, next) => paramsChecker(req, res, next, ["category_id"]),
-  getProductsByCategory
+  (req, res, next) =>
+    paramsChecker(req, res, next, [DATABASE_COLUMNS.PRODUCTS.CATEGORY_ID]),
+  ProductsController.getProductsByCategory
 );
 
 app.put(
   "/add_product",
-  (req, res, next) => bodyParamsChecker(req, res, next, ["name"]),
+  (req, res, next) =>
+    bodyParamsChecker(req, res, next, [
+      DATABASE_COLUMNS.PRODUCTS.CATEGORY_ID,
+      DATABASE_COLUMNS.PRODUCTS.SHORT_DESCRIPTION,
+      DATABASE_COLUMNS.PRODUCTS.PRICE,
+      DATABASE_COLUMNS.PRODUCTS.QUANTITY,
+      DATABASE_COLUMNS.PRODUCTS.NAME,
+    ]),
   passport.authenticate("jwt", { session: false }),
   authChecker,
-  addProduct
+  ProductsController.addProduct
+);
+
+app.delete(
+  "/delete_category/:category_id",
+  (req, res, next) => paramsChecker(req, res, next, ["category_id"]),
+  passport.authenticate("jwt", { session: false }),
+  authChecker,
+  CategoriesController.deleteCatgory
+);
+
+app.get(
+  "/cart",
+  passport.authenticate("jwt", { session: false }),
+  authChecker,
+  CartController.getUsersCart
 );
 
 if (process.env.NODE_ENV !== "production") {
