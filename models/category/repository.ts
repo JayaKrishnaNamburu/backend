@@ -10,6 +10,10 @@ class CatgoriesRepository {
     return Categories.create({ id: uuidV4(), ...params });
   }
 
+  public remove(category_id: string) {
+    return Categories.destroy({ where: { id: category_id } });
+  }
+
   public exists(category_id: string) {
     return Categories.count({ where: { id: category_id } });
   }

@@ -1,6 +1,6 @@
 require("dotenv").config();
 import { ExtractJwt, Strategy } from "passport-jwt";
-import { UserController } from "../models/user/controller";
+import { UsersController } from "../models/user/controller";
 import { PassportStatic } from "passport";
 
 module.exports = (passport: PassportStatic) => {
@@ -18,7 +18,7 @@ module.exports = (passport: PassportStatic) => {
         }
 
         try {
-          const user = await UserController.fetUserAfterJWTToeknAuthentication(
+          const user = await UsersController.fetUserAfterJWTToeknAuthentication(
             email_from_token
           );
 

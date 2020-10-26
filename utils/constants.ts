@@ -2,6 +2,8 @@ export const DATABASE_MODELS = {
   USERS: "users",
   CATEGORIES: "categories",
   PRODUCTS: "products",
+  CART: "cart",
+  CART_ITEMS: "items",
 };
 
 export const DATABASE_COLUMNS = {
@@ -31,5 +33,19 @@ export const DATABASE_COLUMNS = {
     PRICE: "price",
     QUANTITY: "quantity",
     IMAGE: "image",
+  },
+  CART: {
+    ID: "id",
+    USER_ID: "user_id",
+    CREATED_AT: "created_at",
+    UPDATED_AT: "updated_at",
+  },
+  CART_ITEMS: {
+    ID: "id",
+    CART_ID: "cart_id",
+    PRODUCT_ID: "product_id",
+    COUNT: "count",
+    CREATED_AT: "created_at",
+    UPDATED_AT: "updated_at",
   },
 };

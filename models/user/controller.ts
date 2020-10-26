@@ -4,7 +4,17 @@ import jwt from "jsonwebtoken";
 import { UserRepository } from "./repository";
 import { User } from "../user/entity";
 
-class UserController {
+class UsersController {
+  public async getAllUsers(req, res) {
+    try {
+      const users = await UserRepository.getAllUsers();
+      res.json(users).nd();
+    } catch (e) {
+      console.log(e);
+      res.status(500).json({ error: "Failed in fetching users " }).end();
+    }
+  }
+
   public async createUser(
     name: string,
     email: string,
@@ -61,6 +71,6 @@ class UserController {
   }
 }
 
-const userController = new UserController();
+const userController = new UsersController();
 Object.freeze(userController);
-export { userController as UserController };
+export { userController as UsersController };

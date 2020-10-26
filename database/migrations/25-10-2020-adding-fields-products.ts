@@ -54,6 +54,8 @@ export async function up(query: QueryInterface) {
         defaultValue: null,
       }
     );
+
+    transaction.commit();
   } catch (e) {
     transaction.rollback();
     throw e;
