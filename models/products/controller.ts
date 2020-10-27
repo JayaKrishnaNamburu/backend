@@ -1,3 +1,4 @@
+import { ForeignKeyConstraintError } from "sequelize";
 import { DATABASE_COLUMNS } from "../../utils/constants";
 import { CategoriesController } from "../category/controller";
 import { ProductsRepository } from "./repository";
@@ -50,6 +51,11 @@ class ProductsController {
       return res.status(200).end();
     } catch (e) {
       console.log(e);
+
+      if (e instanceof ForeignKeyConstraintError) {
+        return res.status(400).end();
+      }
+
       return res.status(500).end();
     }
   }

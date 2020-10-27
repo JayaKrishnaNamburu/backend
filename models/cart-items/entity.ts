@@ -34,9 +34,11 @@ function initModel(): void {
           key: DATABASE_COLUMNS.PRODUCTS.ID,
         },
       },
+      // TODO: Replace count with quantity, easy to understand
       [DATABASE_COLUMNS.CART_ITEMS.COUNT]: {
         type: DataTypes.INTEGER,
-        defaultValue: 0,
+        defaultValue: 1,
+        allowNull: false,
       },
       createdAt: {
         type: DataTypes.DATE,

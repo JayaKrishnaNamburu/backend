@@ -109,6 +109,14 @@ app.get(
   CartController.getUsersCart
 );
 
+app.put(
+  "/add_to_cart/:product_id",
+  (req, res, next) => paramsChecker(req, res, next, ["product_id"]),
+  passport.authenticate("jwt", { session: false }),
+  authChecker,
+  CartController.addProductToCart
+);
+
 if (process.env.NODE_ENV !== "production") {
   app.listen(port, async () => {
     DatabaseConnection.getInstance()

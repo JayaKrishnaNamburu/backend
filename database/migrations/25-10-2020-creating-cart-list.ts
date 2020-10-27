@@ -31,7 +31,8 @@ export async function up(query: QueryInterface) {
         },
         [DATABASE_COLUMNS.CART_ITEMS.COUNT]: {
           type: DataTypes.INTEGER,
-          defaultValue: 0,
+          defaultValue: 1,
+          allowNull: false,
         },
         createdAt: {
           type: DataTypes.DATE,
