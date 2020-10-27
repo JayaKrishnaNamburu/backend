@@ -1,8 +1,10 @@
+// Table names shouldbe plura ??
+// PSQL is throwing error if not so !!
 export const DATABASE_MODELS = {
   USERS: "users",
   CATEGORIES: "categories",
   PRODUCTS: "products",
-  CART: "cart",
+  CART: "carts",
   CART_ITEMS: "items",
 };
 

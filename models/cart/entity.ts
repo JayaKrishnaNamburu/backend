@@ -44,5 +44,6 @@ function initAssociations(): void {
   Cart.belongsTo(User, {
     as: "user",
     foreignKey: DATABASE_COLUMNS.CART.USER_ID,
+    onDelete: "cascade",
   });
 }

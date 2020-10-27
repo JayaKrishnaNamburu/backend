@@ -6,7 +6,14 @@ class CartController {
   public async getUsersCart(req, res) {
     const { id } = req.user;
     try {
-      await CartRepository.getByUser(id);
+      const result = await CartRepository.getByUser(id);
+      if (result[0]) {
+        res.status(200).json(result[0]).end();
+      }
+
+      if (!result) {
+        res.status(500).end();
+      }
     } catch (e) {
       console.log(e);
       return res.status(500).end();

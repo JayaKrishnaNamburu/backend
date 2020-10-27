@@ -3,6 +3,8 @@ import { DATABASE_CONFIG } from "./config";
 import { User } from "../models/user/entity";
 import { Categories } from "../models/category/entity";
 import { Products } from "../models/products/entity";
+import { CartItems } from "../models/cart-items/entity";
+import { Cart } from "../models/cart/entity";
 
 class DatabaseConnection {
   private sequalize: Sequelize;
@@ -19,7 +21,7 @@ class DatabaseConnection {
   }
 
   public initializeModels = async () => {
-    const models = [User, Categories, Products];
+    const models = [User, Categories, Products, CartItems, Cart];
     models.forEach((model) => model.initModel());
     models.forEach((model) => model.initAssociations());
   };
