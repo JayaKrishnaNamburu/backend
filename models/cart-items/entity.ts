@@ -62,7 +62,7 @@ function initAssociations(): void {
   });
 
   CartItems.belongsTo(Products, {
-    as: "cartToProduct",
+    as: "product",
     foreignKey: DATABASE_COLUMNS.CART_ITEMS.PRODUCT_ID,
   });
 }

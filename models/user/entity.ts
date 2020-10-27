@@ -1,6 +1,7 @@
 import { Model, DataTypes } from "sequelize";
-import { DATABASE_MODELS } from "../../utils/constants";
+import { DATABASE_COLUMNS, DATABASE_MODELS } from "../../utils/constants";
 import { getModelConfig } from "../../utils/database";
+import { Cart } from "../cart/entity";
 
 export class User extends Model {
   static initModel = initModel;
@@ -59,4 +60,9 @@ function initModel(): void {
   );
 }
 
-function initAssociations(): void {}
+function initAssociations(): void {
+  User.hasOne(Cart, {
+    as: "cart",
+    foreignKey: DATABASE_COLUMNS.CART.USER_ID,
+  });
+}

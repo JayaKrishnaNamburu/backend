@@ -1,12 +1,29 @@
 import { v4 as uuidV4 } from "uuid";
+import { DATABASE_COLUMNS } from "../../utils/constants";
+import { Cart } from "../cart/entity";
 import { User } from "./entity";
 class UserRepository {
   public getUser(id: string): Promise<User> {
-    return User.findByPk(id);
+    return User.findByPk(id, {
+      include: [
+        {
+          model: Cart,
+          as: "cart",
+          attributes: [DATABASE_COLUMNS.CART.ID],
+        },
+      ],
+    });
   }
 
   public getAllUsers(): Promise<User[]> {
-    return User.findAll({ attributes: ["email", "name", "id", "phone"] });
+    return User.findAll({
+      attributes: [
+        DATABASE_COLUMNS.USERS.EMAIL,
+        DATABASE_COLUMNS.USERS.NAME,
+        DATABASE_COLUMNS.USERS.ID,
+        DATABASE_COLUMNS.USERS.PHONE,
+      ],
+    });
   }
 
   public async createUser(params: {
@@ -22,23 +39,12 @@ class UserRepository {
     });
   }
 
-  public async getUserWithEmail(email: string) {
-    try {
-      const user = User.findOne({
-        attributes: ["name", "email", "id", "phone", "is_admin"],
-        where: {
-          email,
-        },
-      });
-      return user;
-    } catch (e) {
-      throw new Error(e);
-    }
-  }
-
   public async getUserPasswordHashByEmail(email: string): Promise<any> {
     return User.findOne({
-      attributes: ["password_digest"],
+      attributes: [
+        DATABASE_COLUMNS.USERS.ID,
+        DATABASE_COLUMNS.USERS.PASSWORD_DIGEST,
+      ],
       where: {
         email,
       },

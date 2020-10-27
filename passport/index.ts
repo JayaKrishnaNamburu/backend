@@ -11,17 +11,14 @@ module.exports = (passport: PassportStatic) => {
         secretOrKey: process.env.JWT_SECRET,
       },
       async (data, done) => {
-        const { email: email_from_token } = data;
+        const { id } = data;
 
-        if (!email_from_token) {
+        if (!id) {
           done(null, {});
         }
 
         try {
-          const user = await UsersController.fetUserAfterJWTToeknAuthentication(
-            email_from_token
-          );
-
+          const user = await UsersController.getUserById(id);
           if (!user) {
             done(null, {});
           }

@@ -5,10 +5,14 @@ import { UserRepository } from "./repository";
 import { User } from "../user/entity";
 
 class UsersController {
+  public async getUserById(id: string) {
+    return UserRepository.getUser(id);
+  }
+
   public async getAllUsers(req, res) {
     try {
       const users = await UserRepository.getAllUsers();
-      res.json(users).nd();
+      res.status(200).json(users).end();
     } catch (e) {
       console.log(e);
       res.status(500).json({ error: "Failed in fetching users " }).end();
@@ -33,20 +37,13 @@ class UsersController {
     });
   }
 
-  public fetUserAfterJWTToeknAuthentication(email: string): Promise<User> {
-    return UserRepository.getUserWithEmail(email);
-  }
-
   public async authenticateUser(email: string, password: string) {
     try {
-      const hash = await (
+      const { password_digest, id } = await (
         await UserRepository.getUserPasswordHashByEmail(email)
       ).toJSON();
 
-      const isValidPassword = bcrypt.compareSync(
-        password,
-        hash.password_digest
-      );
+      const isValidPassword = bcrypt.compareSync(password, password_digest);
 
       if (!isValidPassword) {
         return Promise.reject(new Error("Wrong password"));
@@ -56,13 +53,9 @@ class UsersController {
         return Promise.reject(new Error("JWT secret missing!!"));
       }
 
-      const token = jwt.sign(
-        { email, time: Date.now() },
-        process.env.JWT_SECRET,
-        {
-          expiresIn: "2 days",
-        }
-      );
+      const token = jwt.sign({ id, time: Date.now() }, process.env.JWT_SECRET, {
+        expiresIn: "2 days",
+      });
 
       return Promise.resolve({ key: token });
     } catch (e) {

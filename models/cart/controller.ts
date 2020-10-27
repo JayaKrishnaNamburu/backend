@@ -3,20 +3,14 @@ import { CartItemsRepository } from "../cart-items/repository";
 import { CartRepository } from "./repository";
 
 class CartController {
-  public async addToCart() {}
-
   public async getUsersCart(req, res) {
-    const { id } = req.user;
     try {
-      const result = await CartRepository.getByUser(id);
-      if (result[0]) {
-        // TODO: fetch all the product details and counts and send back, not just cart id
-        res.status(200).json(result[0]).end();
-      }
+      const {
+        cart: { id: cart_id },
+      } = req.user;
 
-      if (!result) {
-        res.status(500).end();
-      }
+      const cartItems = await CartRepository.getProductsInCart(cart_id);
+      return res.status(200).json(cartItems).end();
     } catch (e) {
       console.log(e);
       return res.status(500).end();
@@ -24,47 +18,40 @@ class CartController {
   }
 
   public async addProductToCart(req, res) {
-    const { id: user_id } = req.user;
-    const { product_id } = req.params;
-    // Product validation is done by PSQL DB, since we have relation constraint with product_id
-    const cartOfUser = await CartRepository.getByUser(user_id);
-    if (cartOfUser.length !== 2) {
-      res.status(400).end();
-    }
-    try {
-      const { id: cart_id } = cartOfUser[0].toJSON() as {
-        id: string;
-        user_id: string;
-      };
+    const {
+      cart: { id: cart_id },
+    } = req.user;
 
-      const productExists = await CartItemsRepository.isSameProductExists({
+    const { product_id } = req.params;
+    try {
+      const result = await CartItemsRepository.increaseQuantityCountOfTheProduct(
+        {
+          cart_id,
+          product_id,
+        }
+      );
+
+      if (result[0] === 1) {
+        return res.status(200).end();
+      }
+
+      const resultAfterAdding = await CartItemsRepository.add({
         cart_id,
         product_id,
+        count: 1,
       });
-      if (productExists && productExists.toJSON()) {
-        await CartItemsRepository.increaseQuantityCountOfTheProduct({
-          cart_id,
-          product_id,
-        });
-        res.status(200).end();
+      if (resultAfterAdding) {
+        return res.status(200).end();
       } else {
-        const result = await CartItemsRepository.add({
-          cart_id,
-          product_id,
-          count: 1,
-        });
-        if (result) {
-          return res.status(200).end();
-        }
-        if (!result) {
-          return res.status(400).end();
-        }
+        return res.status(400).end();
       }
     } catch (e) {
       console.log(e);
 
+      /* Product validation is done by PSQL DB, 
+    since we have relation constraint with product_id */
       if (e instanceof ForeignKeyConstraintError) {
-        return res.status(400).end();
+        return res.status(400).json({ error: "Invalid product id" }).end();
       }
 
       return res.status(500).end();

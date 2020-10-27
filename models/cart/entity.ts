@@ -1,6 +1,7 @@
 import { Model, DataTypes } from "sequelize";
 import { DATABASE_MODELS, DATABASE_COLUMNS } from "../../utils/constants";
 import { getModelConfig } from "../../utils/database";
+import { CartItems } from "../cart-items/entity";
 import { User } from "../user/entity";
 
 export class Cart extends Model {
@@ -45,5 +46,11 @@ function initAssociations(): void {
     as: "user",
     foreignKey: DATABASE_COLUMNS.CART.USER_ID,
     onDelete: "cascade",
+  });
+
+  Cart.hasMany(CartItems, {
+    as: "items",
+    sourceKey: DATABASE_COLUMNS.CART.ID,
+    foreignKey: DATABASE_COLUMNS.CART_ITEMS.CART_ID,
   });
 }
