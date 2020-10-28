@@ -6,6 +6,8 @@ export const DATABASE_MODELS = {
   PRODUCTS: "products",
   CART: "carts",
   CART_ITEMS: "items",
+  ORDERS: "orders",
+  ORDER_ITEMS: "order_items",
 };
 
 export const DATABASE_COLUMNS = {
@@ -13,7 +15,8 @@ export const DATABASE_COLUMNS = {
     ID: "id",
     NAME: "name",
     EMAIL: "email",
-    CREATEED_AT: "created_at",
+    IS_ADMIN: "is_admin",
+    CREATED_AT: "created_at",
     UPDATED_AT: "updated_at",
     PASSWORD_DIGEST: "password_digest",
     PHONE: "phone",
@@ -47,6 +50,23 @@ export const DATABASE_COLUMNS = {
     CART_ID: "cart_id",
     PRODUCT_ID: "product_id",
     COUNT: "count",
+    CREATED_AT: "created_at",
+    UPDATED_AT: "updated_at",
+  },
+  ORDER: {
+    ID: "id",
+    USER_ID: "user_id",
+    TOTAL_PRICE: "total_price",
+    CREATED_AT: "created_at",
+    UPDATED_AT: "updated_at",
+  },
+  ORDER_ITEMS: {
+    ID: "id",
+    ORDER_ID: "order_id",
+    PRODUCT_ID: "product_id",
+    QUANTITY: "quantity",
+    // Price of per product in order
+    PRICE: "price",
     CREATED_AT: "created_at",
     UPDATED_AT: "updated_at",
   },

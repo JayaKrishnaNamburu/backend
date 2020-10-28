@@ -15,18 +15,6 @@ class CartItemsRepository {
     });
   }
 
-  public async isSameProductExists(params: {
-    cart_id: string;
-    product_id: string;
-  }) {
-    return CartItems.findOne({
-      where: {
-        [DATABASE_COLUMNS.CART_ITEMS.CART_ID]: params.cart_id,
-        [DATABASE_COLUMNS.CART_ITEMS.PRODUCT_ID]: params.product_id,
-      },
-    });
-  }
-
   public async increaseQuantityCountOfTheProduct(params: {
     cart_id: string;
     product_id: string;

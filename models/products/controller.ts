@@ -1,6 +1,5 @@
 import { ForeignKeyConstraintError } from "sequelize";
 import { DATABASE_COLUMNS } from "../../utils/constants";
-import { CategoriesController } from "../category/controller";
 import { ProductsRepository } from "./repository";
 
 class ProductsController {
@@ -22,13 +21,6 @@ class ProductsController {
     }
 
     try {
-      const isValidCategory = await CategoriesController.isCategoryExists(
-        req.body.category_id
-      );
-      if (!isValidCategory) {
-        return res.status(400).json({ error: "Invalid catgory" }).end();
-      }
-
       const {
         name,
         price,

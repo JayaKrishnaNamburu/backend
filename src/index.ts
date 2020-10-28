@@ -15,6 +15,7 @@ import { paramsChecker } from "../utils/params_checker";
 import { bodyParamsChecker } from "../utils/body_params_checker";
 import { DATABASE_COLUMNS } from "../utils/constants";
 import { CartController } from "../models/cart/controller";
+import { OrderController } from "../models/order/controller";
 
 const port = process.env.PORT || 8080;
 const app = express();
@@ -115,6 +116,13 @@ app.put(
   passport.authenticate("jwt", { session: false }),
   authChecker,
   CartController.addProductToCart
+);
+
+app.get(
+  "/checkout",
+  passport.authenticate("jwt", { session: false }),
+  authChecker,
+  OrderController.checkoutUsersCart
 );
 
 if (process.env.NODE_ENV !== "production") {

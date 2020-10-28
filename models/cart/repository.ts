@@ -18,6 +18,7 @@ class CartRepository {
     });
   }
 
+  // TODO: See if can be mereged with the above findOneOrCreate
   public async getProductsInCart(cart_id: string) {
     return Cart.findByPk(cart_id, {
       include: [

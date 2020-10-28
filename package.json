@@ -9,6 +9,7 @@
     "lint": "tslint -p ./",
     "docker": "docker-compose up",
     "migrate": "ts-node-dev ./scripts/migrate.ts",
+    "revert": "ts-node-dev ./scripts/revert.ts",
     "dev": "ts-node-dev ./src/index.ts",
     "build": "rimraf lib && tsc",
     "deploy": "yarn build && gcloud functions deploy component-store --runtime nodejs8 --trigger-http --entry-point app"

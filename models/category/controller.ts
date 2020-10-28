@@ -1,11 +1,6 @@
 import { CatgoriesRepository } from "./repository";
 
 class CategoriesController {
-  public async isCategoryExists(category_id: string) {
-    const result = await CatgoriesRepository.exists(category_id);
-    return result > 0 ? true : false;
-  }
-
   public async getCategories(_, res) {
     const categories = await CatgoriesRepository.get();
     res.status(200).json(categories).end();

@@ -2,6 +2,7 @@ import { Model, DataTypes } from "sequelize";
 import { DATABASE_COLUMNS, DATABASE_MODELS } from "../../utils/constants";
 import { getModelConfig } from "../../utils/database";
 import { Cart } from "../cart/entity";
+import { Order } from "../order/entity";
 
 export class User extends Model {
   static initModel = initModel;
@@ -12,16 +13,21 @@ function initModel(): void {
   const modelConfig = getModelConfig(DATABASE_MODELS.USERS);
   User.init(
     {
-      id: {
+      [DATABASE_COLUMNS.USERS.ID]: {
         type: DataTypes.UUID,
         defaultValue: DataTypes.UUIDV4,
         primaryKey: true,
       },
-      name: {
+      [DATABASE_COLUMNS.USERS.IS_ADMIN]: {
+        type: DataTypes.BOOLEAN,
+        defaultValue: false,
+        allowNull: false,
+      },
+      [DATABASE_COLUMNS.USERS.NAME]: {
         type: DataTypes.STRING,
         allowNull: true,
       },
-      email: {
+      [DATABASE_COLUMNS.USERS.EMAIL]: {
         type: DataTypes.STRING(100),
         unique: true,
         allowNull: false,
@@ -39,7 +45,7 @@ function initModel(): void {
         field: "updated_at",
         allowNull: false,
       },
-      password_digest: {
+      [DATABASE_COLUMNS.USERS.PASSWORD_DIGEST]: {
         type: DataTypes.STRING,
         field: "password_digest",
         allowNull: false,
@@ -47,7 +53,7 @@ function initModel(): void {
           notEmpty: true,
         },
       },
-      phone: {
+      [DATABASE_COLUMNS.USERS.PHONE]: {
         type: DataTypes.STRING,
         allowNull: false,
         unique: true,
@@ -64,5 +70,10 @@ function initAssociations(): void {
   User.hasOne(Cart, {
     as: "cart",
     foreignKey: DATABASE_COLUMNS.CART.USER_ID,
+  });
+
+  User.hasMany(Order, {
+    as: "orders",
+    foreignKey: DATABASE_COLUMNS.ORDER.USER_ID,
   });
 }

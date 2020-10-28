@@ -1,5 +1,5 @@
 import { QueryInterface, DataTypes } from "sequelize";
-import { DATABASE_MODELS } from "../../utils/constants";
+import { DATABASE_COLUMNS, DATABASE_MODELS } from "../../utils/constants";
 
 export async function up(query: QueryInterface) {
   const transaction = await query.sequelize.transaction();
@@ -7,7 +7,7 @@ export async function up(query: QueryInterface) {
   try {
     await query.addColumn(
       DATABASE_MODELS.USERS,
-      "is_admin",
+      DATABASE_COLUMNS.USERS.IS_ADMIN,
       {
         type: DataTypes.BOOLEAN,
         defaultValue: false,

@@ -5,12 +5,16 @@ import { CartRepository } from "./repository";
 class CartController {
   public async getUsersCart(req, res) {
     try {
-      const {
-        cart: { id: cart_id },
-      } = req.user;
+      const { id: user_id } = req.user;
+
+      const [cart] = await CartRepository.getByUser(user_id);
+      const { id: cart_id } = cart.toJSON() as { id: string; user_id: string };
 
       const cartItems = await CartRepository.getProductsInCart(cart_id);
-      return res.status(200).json(cartItems).end();
+      return res
+        .status(200)
+        .json(cartItems || {})
+        .end();
     } catch (e) {
       console.log(e);
       return res.status(500).end();
