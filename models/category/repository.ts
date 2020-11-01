@@ -3,7 +3,7 @@ import { Categories } from "./entity";
 
 class CatgoriesRepository {
   public get() {
-    return Categories.findAll({ attributes: ["id", "name"] });
+    return Categories.findAll({ attributes: ["id", "name", "image"] });
   }
 
   public add(params: Record<string, string>) {

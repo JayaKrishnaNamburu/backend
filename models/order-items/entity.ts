@@ -64,11 +64,11 @@ function initModel() {
 function initAssociations() {
   OrderItems.belongsTo(Order, {
     as: "meta",
-    foreignKey: DATABASE_COLUMNS.ORDER.ID,
+    foreignKey: DATABASE_COLUMNS.ORDER_ITEMS.ORDER_ID,
   });
 
   OrderItems.belongsTo(Products, {
     as: "product",
-    foreignKey: DATABASE_COLUMNS.PRODUCTS.ID,
+    foreignKey: DATABASE_COLUMNS.ORDER_ITEMS.PRODUCT_ID,
   });
 }

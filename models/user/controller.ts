@@ -9,6 +9,17 @@ class UsersController {
     return UserRepository.getUser(id);
   }
 
+  public async getUser(req, res) {
+    const { id } = req.user;
+    try {
+      const result = await UserRepository.getUserDtails(id);
+      res.status(200).json(result).end();
+    } catch (e) {
+      console.log(e);
+      res.status(403).end();
+    }
+  }
+
   public async getAllUsers(req, res) {
     try {
       const users = await UserRepository.getAllUsers();
@@ -60,6 +71,17 @@ class UsersController {
       return Promise.resolve({ key: token });
     } catch (e) {
       return Promise.reject(e);
+    }
+  }
+
+  public async getOrders(req, res) {
+    try {
+      const result = await UserRepository.getCart(req.user.id);
+      const { orders = [] } = (result.toJSON() as unknown) as { orders: any[] };
+      res.status(200).json(orders).end();
+    } catch (e) {
+      console.log(e);
+      res.status(400).end();
     }
   }
 }

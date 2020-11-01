@@ -16,10 +16,6 @@ class ProductsController {
   }
 
   public async addProduct(req, res) {
-    if (req.user && req.user.id_admin) {
-      return res.status(401).json().end();
-    }
-
     try {
       const {
         name,

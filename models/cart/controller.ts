@@ -21,6 +21,21 @@ class CartController {
     }
   }
 
+  public async removProductFromCart(req, res) {
+    const {
+      cart: { id: cart_id },
+    } = req.user;
+
+    const { product_id } = req.params;
+
+    try {
+      await CartItemsRepository.remove({ cart_id, product_id });
+      res.status(200).end();
+    } catch (e) {
+      res.status(500).end();
+    }
+  }
+
   public async addProductToCart(req, res) {
     const {
       cart: { id: cart_id },

@@ -12,6 +12,7 @@ import { CategoriesController } from "../models/category/controller";
 import { AuthController } from "../models/auth/controller";
 import { authChecker } from "../utils/auth-chcker";
 import { paramsChecker } from "../utils/params_checker";
+import { adminChecker } from "../utils/admin-checker";
 import { bodyParamsChecker } from "../utils/body_params_checker";
 import { DATABASE_COLUMNS } from "../utils/constants";
 import { CartController } from "../models/cart/controller";
@@ -53,6 +54,12 @@ app.post(
 app.get("/categories", CategoriesController.getCategories);
 
 app.get(
+  "/user",
+  passport.authenticate("jwt", { session: false }),
+  UsersController.getUser
+);
+
+app.get(
   "/users",
   passport.authenticate("jwt", { session: false }),
   authChecker,
@@ -70,6 +77,7 @@ app.put(
   (req, res, next) => bodyParamsChecker(req, res, next, ["category_name"]),
   passport.authenticate("jwt", { session: false }),
   authChecker,
+  adminChecker,
   CategoriesController.addCategory
 );
 
@@ -92,6 +100,7 @@ app.put(
     ]),
   passport.authenticate("jwt", { session: false }),
   authChecker,
+  adminChecker,
   ProductsController.addProduct
 );
 
@@ -100,6 +109,7 @@ app.delete(
   (req, res, next) => paramsChecker(req, res, next, ["category_id"]),
   passport.authenticate("jwt", { session: false }),
   authChecker,
+  adminChecker,
   CategoriesController.deleteCatgory
 );
 
@@ -118,11 +128,26 @@ app.put(
   CartController.addProductToCart
 );
 
+app.delete(
+  "/delete_from_cart/:product_id",
+  (req, res, next) => paramsChecker(req, res, next, ["product_id"]),
+  passport.authenticate("jwt", { session: false }),
+  authChecker,
+  CartController.removProductFromCart
+);
+
 app.get(
   "/checkout",
   passport.authenticate("jwt", { session: false }),
   authChecker,
   OrderController.checkoutUsersCart
+);
+
+app.get(
+  "/orders",
+  passport.authenticate("jwt", { session: false }),
+  authChecker,
+  UsersController.getOrders
 );
 
 if (process.env.NODE_ENV !== "production") {

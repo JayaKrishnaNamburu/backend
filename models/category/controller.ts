@@ -7,18 +7,13 @@ class CategoriesController {
   }
 
   public async addCategory(req, res) {
-    const { is_admin } = req.user;
-    if (!is_admin) {
-      return res.status(401).end();
-    }
-
-    const { category_name } = req.body;
+    const { category_name, image } = req.body;
     if (!category_name) {
       return res.status(400).end();
     }
 
     try {
-      await CatgoriesRepository.add({ name: category_name });
+      await CatgoriesRepository.add({ name: category_name, image });
       return res.status(200).end();
     } catch (e) {
       console.log(e);

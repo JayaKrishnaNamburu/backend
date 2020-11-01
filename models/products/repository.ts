@@ -22,7 +22,9 @@ class ProductsRepository {
           attributes: [DATABASE_COLUMNS.CATEGORIES.NAME],
         },
       ],
-      where: { category_id },
+      where: {
+        category_id,
+      },
       attributes: [
         DATABASE_COLUMNS.PRODUCTS.ID,
         DATABASE_COLUMNS.PRODUCTS.NAME,
